@@ -5,19 +5,20 @@ namespace AgendaAPI.Models;
 
 public class Telefone
 {
-    const string REGEX_PATTERN = @"\d{4,5}-\d{4}";
-
-    private string _valor;
+    private const string REGEX_PATTERN = @"\d{4,5}-\d{4}";
 
     public Telefone(string valor)
     {
-        _valor = valor;
+        Valor = valor;
     }
+
+    public string Valor { get; }
 
     public bool Valido()
     {
-        return Regex.IsMatch(_valor, REGEX_PATTERN);
+        return Regex.IsMatch(Valor, REGEX_PATTERN);
     }
 
-    public static implicit operator string(Telefone tel) => tel._valor;
+    public static implicit operator string(Telefone tel) => tel.Valor;
+    public static implicit operator Telefone(string valor) => new Telefone(valor);
 }

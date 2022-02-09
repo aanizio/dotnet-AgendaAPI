@@ -37,4 +37,12 @@ public class TestTelefone
         string telefoneString = telefone;
         Assert.Equal(CONTEUDO, telefoneString);
     }
+
+    [Fact]
+    public void CastDeString()
+    {
+        const string CONTEUDO = "99999-9999";
+        Telefone telefone = CONTEUDO;
+        Assert.Equal(telefone.Valor, CONTEUDO);
+    }
 }
