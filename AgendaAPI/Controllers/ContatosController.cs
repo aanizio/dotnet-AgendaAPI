@@ -48,13 +48,19 @@ namespace AgendaAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContato(long id, ContatoDTO contatoDTO)
         {
-            if (id != contatoDTO.Id)
+            var contato = await _context.Contatos.FindAsync(id);
+
+            if (id != contatoDTO.Id || contato == null)
             {
                 return BadRequest();
             }
-
-            var contato = await _context.Contatos.FindAsync(id);
+            
             ContatoFromDTO(contatoDTO, contato);
+
+            if (!Valido(contato, out var message))
+            {
+                return BadRequest(message);
+            }
 
             _context.Entry(contato).State = EntityState.Modified;
 
@@ -82,6 +88,11 @@ namespace AgendaAPI.Controllers
         public async Task<ActionResult<Contato>> PostContato(ContatoDTO contatoDTO)
         {
             var contato = ContatoFromDTO(contatoDTO);
+            
+            if (!Valido(contato, out var message))
+            {
+                return BadRequest(message);
+            }
 
             _context.Contatos.Add(contato);
             await _context.SaveChangesAsync();
@@ -108,6 +119,22 @@ namespace AgendaAPI.Controllers
         private bool ContatoExists(long id)
         {
             return _context.Contatos.Any(contato => contato.Id == id);
+        }
+
+        static private bool Valido(Contato contato, out string message)
+        {
+            var result = false;
+            message = "";
+            Telefone telefone = contato.Telefone;
+            if (!telefone.Valido())
+            {
+                message = "Telefone inválido";
+            }
+            else
+            {
+                result = true;
+            }
+            return result;
         }
 
         static private ContatoDTO ContatoToDTO(Contato contato) =>
