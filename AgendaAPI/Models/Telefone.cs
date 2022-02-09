@@ -5,11 +5,11 @@ namespace AgendaAPI.Models;
 
 public class Telefone
 {
-    private const string REGEX_PATTERN = @"\d{4,5}-\d{4}";
+    private const string REGEX_PATTERN = @"^\d{4,5}-\d{4}$";
 
     public Telefone(string valor)
     {
-        Valor = valor;
+        Valor = valor.Trim();
     }
 
     public string Valor { get; }

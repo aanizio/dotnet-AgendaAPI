@@ -30,6 +30,22 @@ public class TestTelefone
     }
 
     [Fact]
+    public void ComTextoNoInicio_DeveRetornarInvalido()
+    {
+        var telefone = new Telefone("teste9999-9999");
+        var actual = telefone.Valido();
+        Assert.False(actual);
+    }
+
+    [Fact]
+    public void ComEspacosInicioEFim_DeveLimparEspacos()
+    {
+        const string CONTEUDO = "9999-9999";
+        var telefone = new Telefone($"    {CONTEUDO}      ");
+        Assert.Equal(CONTEUDO, telefone.Valor);
+    }
+
+    [Fact]
     public void CastParaString()
     {
         const string CONTEUDO = "99999-9999";
@@ -43,6 +59,6 @@ public class TestTelefone
     {
         const string CONTEUDO = "99999-9999";
         Telefone telefone = CONTEUDO;
-        Assert.Equal(telefone.Valor, CONTEUDO);
+        Assert.Equal(CONTEUDO, telefone.Valor);
     }
 }
